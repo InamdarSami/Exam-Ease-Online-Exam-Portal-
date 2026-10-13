@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Teacher Login - ExamEase</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            background: #f4f6f8;
+            font-family: Arial, sans-serif;
+        }
+
+
+
+        .login-page {
+
+            min-height: 100vh;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            padding: 30px 20px;
+        }
+
+
+
+        .login-box {
+
+            width: 100%;
+            max-width: 460px;
+
+            background: white;
+
+            padding: 45px 42px;
+
+            border-radius: 16px;
+
+            border: 1px solid #e2e6ea;
+
+            box-shadow:
+                0 10px 35px rgba(0, 0, 0, 0.08);
+        }
+
+
+
+        .login-logo {
+
+            text-align: center;
+
+            margin-bottom: 30px;
+        }
+
+        .logo-icon {
+
+            width: 58px;
+            height: 58px;
+
+            margin: 0 auto 15px;
+
+            background: #1f2937;
+            color: white;
+
+            border-radius: 12px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 26px;
+            font-weight: bold;
+        }
+
+        .login-logo h2 {
+
+            margin: 0;
+
+            font-size: 24px;
+
+            color: #1f2937;
+        }
+
+
+
+        .login-box h1 {
+
+            text-align: center;
+
+            margin: 0 0 8px;
+
+            font-size: 28px;
+
+            color: #111827;
+        }
+
+        .login-subtitle {
+
+            text-align: center;
+
+            color: #6b7280;
+
+            font-size: 15px;
+
+            margin-bottom: 30px;
+        }
+
+
+
+        label {
+
+            display: block;
+
+            margin-bottom: 8px;
+
+            color: #374151;
+
+            font-size: 14px;
+
+            font-weight: 600;
+        }
+
+        input {
+
+            width: 100%;
+
+            padding: 13px 14px;
+
+            margin-bottom: 20px;
+
+            border: 1px solid #d1d5db;
+
+            border-radius: 8px;
+
+            background: white;
+
+            font-size: 15px;
+
+            outline: none;
+
+            transition: 0.2s;
+        }
+
+        input:focus {
+
+            border-color: #4b5563;
+
+            box-shadow:
+                0 0 0 3px rgba(75, 85, 99, 0.10);
+        }
+
+
+
+        form button {
+
+            width: 100%;
+
+            padding: 14px;
+
+            margin-top: 5px;
+
+            border: none;
+
+            border-radius: 8px;
+
+            background: #1f2937;
+
+            color: white;
+
+            font-size: 16px;
+
+            font-weight: 600;
+
+            cursor: pointer;
+
+            transition: 0.2s;
+        }
+
+        form button:hover {
+
+            background: #111827;
+
+            transform: translateY(-1px);
+        }
+
+
+
+        .register-text {
+
+            text-align: center;
+
+            margin-top: 25px;
+
+            color: #6b7280;
+
+            font-size: 14px;
+        }
+
+        .register-text a {
+
+            color: #1f2937;
+
+            font-weight: 700;
+
+            text-decoration: none;
+        }
+
+        .register-text a:hover {
+
+            text-decoration: underline;
+        }
+
+
+
+        .back-home {
+
+            display: block;
+
+            text-align: center;
+
+            margin-top: 22px;
+
+            padding-top: 20px;
+
+            border-top: 1px solid #eeeeee;
+
+            color: #6b7280;
+
+            text-decoration: none;
+
+            font-size: 14px;
+        }
+
+        .back-home:hover {
+
+            color: #111827;
+        }
+
+
+
+        .portal-note {
+
+            text-align: center;
+
+            margin-top: 25px;
+
+            font-size: 12px;
+
+            color: #9ca3af;
+        }
+
+
+
+        @media (max-width: 500px) {
+
+            .login-page {
+                padding: 20px 15px;
+            }
+
+            .login-box {
+
+                padding: 35px 25px;
+
+                border-radius: 12px;
+            }
+
+            .login-box h1 {
+
+                font-size: 24px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<div class="login-page">
+
+
+    <div class="login-box">
+
+
+
+        <div class="login-logo">
+
+            <div class="logo-icon">
+                E
+            </div>
+
+            <h2>
+                ExamEase
+            </h2>
+
+        </div>
+
+
+
+        <h1>
+            Teacher Login
+        </h1>
+
+        <p class="login-subtitle">
+            Access your examination management portal
+        </p>
+
+
+
+        <form method="POST"
+              action="/teacher-login">
+
+
+            <label>
+                Email Address
+            </label>
+
+            <input
+                type="email"
+                name="email"
+                placeholder="Enter your registered email"
+                required
+            >
+
+
+            <label>
+                Password
+            </label>
+
+            <input
+                type="password"
+                name="password"
+                placeholder="Enter your password"
+                required
+            >
+
+
+            <button type="submit">
+                Login to ExamEase
+            </button>
+
+
+        </form>
+
+
+
+        <p class="register-text">
+
+            Don't have an account?
+
+            <a href="/teacher-register">
+                Register here
+            </a>
+
+        </p>
+
+
+
+        <a href="/"
+           class="back-home">
+
+            ← Back to Home
+
+        </a>
+
+
+        <p class="portal-note">
+            Faculty Examination Management Portal
+        </p>
+
+
+    </div>
+
+
+</div>
+
+
+</body>
+
+</html>

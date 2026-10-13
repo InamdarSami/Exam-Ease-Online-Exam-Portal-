@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
+
+<title>Create Exam - ExamEase</title>
+
+<link rel="stylesheet"
+      href="{{ url_for('static', filename='css/style.css') }}">
+
+<style>
+
+    .create-exam-page {
+        max-width: 950px;
+        margin: 50px auto;
+        padding: 0 25px 50px;
+    }
+
+    .page-header {
+        margin-bottom: 30px;
+    }
+
+    .page-header h1 {
+        font-size: 34px;
+        margin-bottom: 8px;
+    }
+
+    .page-header p {
+        color: #666;
+        font-size: 16px;
+    }
+
+    .exam-form-card {
+        background: white;
+        padding: 40px;
+        border-radius: 16px;
+        box-shadow: 0 6px 25px rgba(0, 0, 0, 0.08);
+    }
+
+    .form-section {
+        margin-bottom: 35px;
+    }
+
+    .form-section:last-of-type {
+        margin-bottom: 25px;
+    }
+
+    .section-title {
+        font-size: 21px;
+        margin-bottom: 5px;
+    }
+
+    .section-description {
+        color: #777;
+        font-size: 14px;
+        margin-bottom: 25px;
+    }
+
+    .form-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 22px 25px;
+    }
+
+    .form-group {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .form-group.full-width {
+        grid-column: 1 / -1;
+    }
+
+    .form-group label {
+        font-weight: 600;
+        margin-bottom: 8px;
+        font-size: 15px;
+    }
+
+    .form-group input,
+    .form-group select {
+        width: 100%;
+        box-sizing: border-box;
+        padding: 14px 15px;
+        border: 1px solid #d8d8d8;
+        border-radius: 9px;
+        font-size: 15px;
+        background: #fff;
+        outline: none;
+        transition: 0.2s;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus {
+        border-color: #222;
+        box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.06);
+    }
+
+    .form-group input::placeholder {
+        color: #aaa;
+    }
+
+    .form-divider {
+        border: none;
+        border-top: 1px solid #eee;
+        margin: 35px 0;
+    }
+
+    .form-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 12px;
+        margin-top: 10px;
+    }
+
+    .cancel-btn {
+        display: inline-block;
+        padding: 14px 24px;
+        border: 1px solid #ddd;
+        border-radius: 9px;
+        text-decoration: none;
+        color: #333;
+        font-weight: 600;
+        background: white;
+    }
+
+    .cancel-btn:hover {
+        background: #f5f5f5;
+    }
+
+    .create-exam-btn {
+        padding: 14px 28px;
+        border: none;
+        border-radius: 9px;
+        background: #222;
+        color: white;
+        font-size: 15px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: 0.2s;
+    }
+
+    .create-exam-btn:hover {
+        background: #444;
+        transform: translateY(-1px);
+    }
+
+    @media (max-width: 700px) {
+
+        .create-exam-page {
+            margin: 30px auto;
+            padding: 0 15px 40px;
+        }
+
+        .exam-form-card {
+            padding: 25px 20px;
+        }
+
+        .page-header h1 {
+            font-size: 28px;
+        }
+
+        .form-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .form-group.full-width {
+            grid-column: auto;
+        }
+
+        .form-actions {
+            flex-direction: column;
+        }
+
+        .cancel-btn,
+        .create-exam-btn {
+            width: 100%;
+            text-align: center;
+            box-sizing: border-box;
+        }
+
+    }
+
+</style>
+
+
+</head>
+
+<body>
+
+
+<nav>
+
+    <div class="logo">
+        ExamEase
+    </div>
+
+    <div class="nav-links">
+
+        <a href="/teacher-dashboard">
+            Dashboard
+        </a>
+
+        <a href="/my-exams">
+            My Exams
+        </a>
+
+        <a href="/logout">
+            Logout
+        </a>
+
+    </div>
+
+</nav>
+
+
+
+<div class="create-exam-page">
+
+
+
+    <div class="page-header">
+
+        <h1>
+            Create New Exam
+        </h1>
+
+        <p>
+            Set up your examination by providing the details below.
+        </p>
+
+    </div>
+
+
+
+    <div class="exam-form-card">
+
+        <form method="POST"
+              action="/create-exam">
+
+
+            <!-- BASIC INFORMATION -->
+
+            <div class="form-section">
+
+                <h2 class="section-title">
+                    📋 Basic Information
+                </h2>
+
+                <p class="section-description">
+                    Enter the basic details of your examination.
+                </p>
+
+
+                <div class="form-grid">
+
+
+                    <div class="form-group full-width">
+
+                        <label>
+                            Exam Name
+                        </label>
+
+                        <input
+                            type="text"
+                            name="exam_name"
+                            placeholder="Example: Data Structures Mid-Term"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label>
+                            Subject
+                        </label>
+
+                        <input
+                            type="text"
+                            name="subject"
+                            placeholder="Example: Data Structures"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label>
+                            Duration
+                        </label>
+
+                        <input
+                            type="number"
+                            name="duration"
+                            placeholder="Example: 60 minutes"
+                            min="1"
+                            required
+                        >
+
+                    </div>
+
+
+                </div>
+
+            </div>
+
+
+            <hr class="form-divider">
+
+
+
+            <div class="form-section">
+
+                <h2 class="section-title">
+                    ⚙️ Exam Settings
+                </h2>
+
+                <p class="section-description">
+                    Configure questions, marks and examination rules.
+                </p>
+
+
+                <div class="form-grid">
+
+
+                    <div class="form-group">
+
+                        <label>
+                            Number of Questions
+                        </label>
+
+                        <input
+                            type="number"
+                            name="total_questions"
+                            placeholder="Example: 20"
+                            min="1"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label>
+                            Marks per Question
+                        </label>
+
+                        <input
+                            type="number"
+                            name="marks_per_question"
+                            placeholder="Example: 1"
+                            min="1"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label>
+                            Negative Marking
+                        </label>
+
+                        <select name="negative_marking">
+
+                            <option value="0">
+                                No Negative Marking
+                            </option>
+
+                            <option value="0.25">
+                                0.25 marks
+                            </option>
+
+                            <option value="0.5">
+                                0.5 marks
+                            </option>
+
+                            <option value="1">
+                                1 mark
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label>
+                            Number of Sets
+                        </label>
+
+                        <select name="number_of_sets">
+
+                            <option value="1">
+                                1 Set
+                            </option>
+
+                            <option value="2">
+                                2 Sets
+                            </option>
+
+                            <option value="3">
+                                3 Sets
+                            </option>
+
+                            <option value="4">
+                                4 Sets
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                </div>
+
+            </div>
+
+
+
+            <div class="form-actions">
+
+                <a href="/teacher-dashboard"
+                   class="cancel-btn">
+
+                    Cancel
+
+                </a>
+
+
+                <button type="submit"
+                        class="create-exam-btn">
+
+                    Create Exam →
+
+                </button>
+
+            </div>
+
+
+        </form>
+
+    </div>
+
+</div>
+
+
+</body>
+
+</html>
