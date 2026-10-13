@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>My Results - ExamEase</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+
+    <style>
+        .results-container {
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+
+        .results-container h1 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .result-card {
+            background: white;
+            padding: 25px;
+            margin-bottom: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        .result-card h2 {
+            margin-bottom: 10px;
+        }
+
+        .result-info {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .result-info p {
+            margin: 5px 0;
+        }
+
+        .score {
+            font-size: 24px;
+            font-weight: bold;
+            margin: 15px 0;
+        }
+
+        .back-button {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 12px 20px;
+            background: #222;
+            color: white;
+            text-decoration: none;
+            border-radius: 7px;
+        }
+
+        .back-button:hover {
+            opacity: 0.9;
+        }
+
+        .no-results {
+            background: white;
+            padding: 30px;
+            text-align: center;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        @media (max-width: 600px) {
+            .result-info {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<nav>
+
+    <div class="logo">
+        ExamEase
+    </div>
+
+    <div>
+        <a href="/student-dashboard">Dashboard</a>
+        <a href="/logout">Logout</a>
+    </div>
+
+</nav>
+
+<div class="results-container">
+
+    <h1>My Exam Results 📊</h1>
+
+    {% if results %}
+
+        {% for result in results %}
+
+            <div class="result-card">
+
+                <h2>
+                    {{ result["exam_name"] }}
+                </h2>
+
+                <p>
+                    <strong>Subject:</strong>
+                    {{ result["subject"] }}
+                </p>
+
+                <div class="score">
+                    Score:
+                    {{ "%.2f"|format(result["score"]) }}
+                    /
+                    {{ "%.2f"|format(result["total_marks"]) }}
+                </div>
+
+                <div class="result-info">
+
+                    <p>
+                        <strong>Percentage:</strong>
+                        {{ "%.2f"|format(result["percentage"]) }}%
+                    </p>
+
+                    <p>
+                        <strong>Correct Answers:</strong>
+                        {{ result["correct"] }}
+                    </p>
+
+                    <p>
+                        <strong>Wrong Answers:</strong>
+                        {{ result["wrong"] }}
+                    </p>
+
+                    <p>
+                        <strong>Unanswered:</strong>
+                        {{ result["unanswered"] }}
+                    </p>
+
+                </div>
+
+            </div>
+
+        {% endfor %}
+
+    {% else %}
+
+        <div class="no-results">
+
+            <h2>No Results Yet</h2>
+
+            <p>
+                Complete an exam and your result will appear here.
+            </p>
+
+        </div>
+
+    {% endif %}
+
+    <a href="/student-dashboard" class="back-button">
+        Back to Dashboard
+    </a>
+
+</div>
+
+</body>
+</html>

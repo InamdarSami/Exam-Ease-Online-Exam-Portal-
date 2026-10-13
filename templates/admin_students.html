@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Student Management - ExamEase</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+
+    <style>
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f6f9;
+        }
+
+    
+        .admin-header {
+            background: #172033;
+            color: white;
+            padding: 20px 40px;
+
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .admin-header h1 {
+            margin: 0;
+            font-size: 26px;
+        }
+
+        .admin-header p {
+            margin: 5px 0 0;
+            color: #b9c2d0;
+        }
+
+        .logout-btn {
+            background: #dc3545;
+            color: white;
+            text-decoration: none;
+            padding: 11px 18px;
+            border-radius: 7px;
+        }
+
+        
+
+        .container {
+            width: 92%;
+            max-width: 1250px;
+            margin: 35px auto;
+        }
+
+        .top-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .top-section h2 {
+            margin: 0;
+            font-size: 30px;
+            color: #172033;
+        }
+
+        .back-btn {
+            text-decoration: none;
+            background: #172033;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 7px;
+        }
+
+
+        .search-box {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+
+            box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+        }
+
+        .search-box input {
+            width: 100%;
+            box-sizing: border-box;
+
+            padding: 14px;
+            border: 1px solid #ddd;
+            border-radius: 7px;
+
+            font-size: 15px;
+        }
+
+
+
+        .table-container {
+            background: white;
+            border-radius: 10px;
+            overflow-x: auto;
+
+            box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            background: #172033;
+            color: white;
+            padding: 16px;
+            text-align: left;
+        }
+
+        td {
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        tr:hover {
+            background: #f8f9fb;
+        }
+
+        .delete-btn {
+            background: #dc3545;
+            color: white;
+
+            border: none;
+            padding: 8px 13px;
+
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .delete-btn:hover {
+            background: #b02a37;
+        }
+
+        .student-count {
+            margin-bottom: 15px;
+            color: #666;
+        }
+
+    
+        @media (max-width: 700px) {
+
+            .admin-header {
+                padding: 18px;
+            }
+
+            .container {
+                width: 94%;
+            }
+
+            .top-section {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+
+            th,
+            td {
+                padding: 11px;
+                font-size: 14px;
+            }
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+
+<header class="admin-header">
+
+    <div>
+
+        <h1>ExamEase Administration</h1>
+
+        <p>Student Management</p>
+
+    </div>
+
+    <a href="{{ url_for('logout') }}"
+       class="logout-btn">
+
+        Logout
+
+    </a>
+
+</header>
+
+
+<div class="container">
+
+
+    <div class="top-section">
+
+        <h2>Student Management</h2>
+
+        <a href="{{ url_for('admin_dashboard') }}"
+           class="back-btn">
+
+           
+
+        </a>
+
+    </div>
+
+
+    <p class="student-count">
+
+        Total Students:
+        <strong>{{ students|length }}</strong>
+
+    </p>
+
+
+
+
+    <div class="search-box">
+
+        <input
+            type="text"
+            id="studentSearch"
+            placeholder="Search by name, email or roll number..."
+            onkeyup="searchStudents()"
+        >
+
+    </div>
+
+
+    <div class="table-container">
+
+        <table id="studentTable">
+
+            <thead>
+
+                <tr>
+
+                    <th>ID</th>
+
+                    <th>Name</th>
+
+                    <th>Roll Number</th>
+
+                    <th>Email</th>
+
+                    <th>Exams Attempted</th>
+
+                    <th>Action</th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+                {% for student in students %}
+
+                <tr>
+
+                    <td>
+                        {{ student["id"] }}
+                    </td>
+
+                    <td>
+                        {{ student["name"] }}
+                    </td>
+
+                    <td>
+                        {{ student["roll_number"] }}
+                    </td>
+
+                    <td>
+                        {{ student["email"] }}
+                    </td>
+
+                    <td>
+                        {{ student["exams_attempted"] }}
+                    </td>
+
+                    <td>
+
+                        <button
+                            class="delete-btn"
+                            onclick="deleteStudent(
+                                '{{ student["id"] }}',
+                                '{{ student["name"] }}'
+                            )">
+
+                            Delete
+
+                        </button>
+
+                    </td>
+
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+
+
+
+<script>
+
+function searchStudents() {
+
+    let input =
+        document.getElementById("studentSearch");
+
+    let filter =
+        input.value.toLowerCase();
+
+    let table =
+        document.getElementById("studentTable");
+
+    let rows =
+        table.getElementsByTagName("tr");
+
+
+    for (let i = 1; i < rows.length; i++) {
+
+        let text =
+            rows[i].innerText.toLowerCase();
+
+        if (text.includes(filter)) {
+
+            rows[i].style.display = "";
+
+        } else {
+
+            rows[i].style.display = "none";
+
+        }
+
+    }
+
+}
+
+
+function deleteStudent(id, name) {
+
+    let confirmDelete =
+        confirm(
+            "Are you sure you want to delete " +
+            name +
+            "?"
+        );
+
+
+    if (confirmDelete) {
+
+        window.location.href =
+            "/admin/delete-student/" + id;
+
+    }
+
+}
+
+</script>
+
+
+</body>
+
+</html>

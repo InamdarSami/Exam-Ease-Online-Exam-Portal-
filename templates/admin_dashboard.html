@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - ExamEase</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+    <style>
+        .admin-dashboard {
+            min-height: 100vh;
+            background: #f4f7fb;
+        }
+
+        .admin-header {
+            background: #172554;
+            color: white;
+            padding: 22px 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .admin-header h1 {
+            margin: 0;
+            font-size: 26px;
+        }
+
+        .admin-header p {
+            margin: 5px 0 0;
+            color: #dbeafe;
+        }
+
+        .logout-btn {
+            background: #ef4444;
+            color: white;
+            text-decoration: none;
+            padding: 10px 18px;
+            border-radius: 7px;
+            font-weight: bold;
+        }
+
+        .admin-container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 35px auto;
+        }
+
+        .welcome-box {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+            margin-bottom: 25px;
+        }
+
+        .welcome-box h2 {
+            margin: 0 0 8px;
+            color: #172554;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+            text-align: center;
+        }
+
+        .stat-card h3 {
+            margin: 0;
+            font-size: 32px;
+            color: #2563eb;
+        }
+
+        .stat-card p {
+            margin-top: 8px;
+            color: #555;
+        }
+
+        .table-section {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+        }
+
+        .table-section h2 {
+            color: #172554;
+            margin-top: 0;
+        }
+
+        .table-container {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        th {
+            background: #172554;
+            color: white;
+            padding: 13px;
+            text-align: left;
+        }
+
+        td {
+            padding: 13px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        tr:hover {
+            background: #f8fafc;
+        }
+
+        .delete-btn {
+            background: #dc2626;
+            color: white;
+            border: none;
+            padding: 7px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .delete-btn:hover {
+            background: #b91c1c;
+        }
+
+        .empty {
+            text-align: center;
+            color: #777;
+            padding: 20px;
+        }
+
+        @media (max-width: 900px) {
+            .stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 600px) {
+            .admin-header {
+                padding: 18px 20px;
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+
+            .admin-container {
+                width: 94%;
+            }
+
+            .stats {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="admin-dashboard">
+
+    <header class="admin-header">
+        <div>
+            <h1>ExamEase Admin Panel</h1>
+            <p>Online Examination Portal</p>
+        </div>
+
+        <a href="{{ url_for('logout') }}" class="logout-btn">
+            Logout
+        </a>
+    </header>
+
+
+    <main class="admin-container">
+
+        <div class="welcome-box">
+            <h2>Welcome, {{ session["admin_name"] }} 👋</h2>
+            <p>Manage students, teachers, examinations and results from one place.</p>
+        </div>
+
+
+        <div class="stats">
+
+            <div class="stat-card">
+                <h3>{{ total_students }}</h3>
+                <p>Registered Students</p>
+            </div>
+
+            <div class="stat-card">
+                <h3>{{ total_teachers }}</h3>
+                <p>Registered Teachers</p>
+            </div>
+
+            <div class="stat-card">
+                <h3>{{ total_exams }}</h3>
+                <p>Total Examinations</p>
+            </div>
+
+            <div class="stat-card">
+                <h3>{{ total_results }}</h3>
+                <p>Total Results</p>
+            </div>
+
+        </div>
+
+
+        <section class="table-section" id="students">
+
+            <h2>👨‍🎓 Registered Students</h2>
+
+            <div class="table-container">
+
+                {% if students %}
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Roll Number</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                    {% for student in students %}
+
+                        <tr>
+                            <td>{{ student["id"] }}</td>
+                            <td>{{ student["name"] }}</td>
+                            <td>{{ student["email"] }}</td>
+                            <td>{{ student["roll_number"] }}</td>
+
+                            <td>
+                                <form method="POST"
+                                      action="{{ url_for('admin_delete_student', student_id=student['id']) }}"
+                                      onsubmit="return confirm('Are you sure you want to delete this student?');">
+
+                                    <button type="submit" class="delete-btn">
+                                        Delete
+                                    </button>
+
+                                </form>
+                            </td>
+                        </tr>
+
+                    {% endfor %}
+
+                    </tbody>
+                </table>
+
+                {% else %}
+
+                    <p class="empty">No students registered yet.</p>
+
+                {% endif %}
+
+            </div>
+
+        </section>
+
+
+        <section class="table-section">
+
+            <h2>👨‍🏫 Registered Teachers</h2>
+
+            <div class="table-container">
+
+                {% if teachers %}
+
+                <table>
+
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                    {% for teacher in teachers %}
+
+                        <tr>
+                            <td>{{ teacher["id"] }}</td>
+                            <td>{{ teacher["name"] }}</td>
+                            <td>{{ teacher["email"] }}</td>
+
+                            <td>
+
+                                <form method="POST"
+                                      action="{{ url_for('admin_delete_teacher', teacher_id=teacher['id']) }}"
+                                      onsubmit="return confirm('Are you sure you want to delete this teacher?');">
+
+                                    <button type="submit" class="delete-btn">
+                                        Delete
+                                    </button>
+
+                                </form>
+
+                            </td>
+                        </tr>
+
+                    {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+                {% else %}
+
+                    <p class="empty">No teachers registered yet.</p>
+
+                {% endif %}
+
+            </div>
+
+        </section>
+
+
+        <section class="table-section">
+
+            <h2>📝 Examination Management</h2>
+
+            <div class="table-container">
+
+                {% if exams %}
+
+                <table>
+
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Exam Name</th>
+                            <th>Subject</th>
+                            <th>Duration</th>
+                            <th>Questions</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                    {% for exam in exams %}
+
+                        <tr>
+                            <td>{{ exam["id"] }}</td>
+                            <td>{{ exam["exam_name"] }}</td>
+                            <td>{{ exam["subject"] }}</td>
+                            <td>{{ exam["duration"] }} min</td>
+                            <td>{{ exam["total_questions"] }}</td>
+
+                            <td>
+
+                                <form method="POST"
+                                      action="{{ url_for('admin_delete_exam', exam_id=exam['id']) }}"
+                                      onsubmit="return confirm('Are you sure you want to delete this examination?');">
+
+                                    <button type="submit" class="delete-btn">
+                                        Delete
+                                    </button>
+
+                                </form>
+
+                            </td>
+                        </tr>
+
+                    {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+                {% else %}
+
+                    <p class="empty">No examinations created yet.</p>
+
+                {% endif %}
+
+            </div>
+
+        </section>
+
+
+        <section class="table-section">
+
+            <h2>📊 Examination Results</h2>
+
+            <div class="table-container">
+
+                {% if results %}
+
+                <table>
+
+                    <thead>
+                        <tr>
+                            <th>Student</th>
+                            <th>Exam</th>
+                            <th>Score</th>
+                            <th>Total Marks</th>
+                            <th>Percentage</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                    {% for result in results %}
+
+                        <tr>
+                            <td>{{ result["student_name"] }}</td>
+                            <td>{{ result["exam_name"] }}</td>
+                            <td>{{ result["score"] }}</td>
+                            <td>{{ result["total_marks"] }}</td>
+                            <td>{{ result["percentage"] }}%</td>
+                        </tr>
+
+                    {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+                {% else %}
+
+                    <p class="empty">No examination results available.</p>
+
+                {% endif %}
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Question Sets - ExamEase</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+
+<nav>
+
+    <div class="logo">ExamEase</div>
+
+    <div class="nav-links">
+        <a href="/teacher-dashboard">Dashboard</a>
+        <a href="/my-exams">My Exams</a>
+    </div>
+
+    <a href="/logout" class="login-btn">Logout</a>
+
+</nav>
+
+<div class="dashboard">
+
+    <h1>{{ exam["exam_name"] }}</h1>
+
+    <p>
+        Subject: <strong>{{ exam["subject"] }}</strong>
+    </p>
+
+    <h2>Generated Question Sets</h2>
+
+    {% for set_number, questions in sets.items() %}
+
+        <div class="question-card">
+
+            <h2>Set {{ set_number }}</h2>
+
+            {% for question in questions %}
+
+                <div class="set-question">
+
+                    <h3>
+                        Q{{ loop.index }}.
+                        {{ question["question_text"] }}
+                    </h3>
+
+                    <p>A) {{ question["option_a"] }}</p>
+                    <p>B) {{ question["option_b"] }}</p>
+                    <p>C) {{ question["option_c"] }}</p>
+                    <p>D) {{ question["option_d"] }}</p>
+
+                    <p>
+                        <strong>Correct Answer:</strong>
+                        {{ question["correct_answer"] }}
+                    </p>
+
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+    {% endfor %}
+
+    <br>
+
+    <a href="/my-exams" class="secondary-btn">
+        ← Back to My Exams
+    </a>
+
+</div>
+
+<footer>
+    <p>© 2026 ExamEase | Smart Student Examination Portal</p>
+</footer>
+
+</body>
+</html>
