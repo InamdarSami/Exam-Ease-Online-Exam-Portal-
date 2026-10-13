@@ -1306,9 +1306,9 @@ def admin_dashboard():
     )
 
 
-
 @app.route(
-    "/admin/delete-student/<int:student_id>"
+    "/admin/delete-student/<int:student_id>",
+    methods=["POST"]
 )
 def admin_delete_student(student_id):
 
@@ -1320,23 +1320,18 @@ def admin_delete_student(student_id):
     connection.execute("""
         DELETE FROM results
         WHERE student_id = ?
-    """, (
-        student_id,
-    ))
+    """, (student_id,))
 
     connection.execute("""
         DELETE FROM students
         WHERE id = ?
-    """, (
-        student_id,
-    ))
+    """, (student_id,))
 
     connection.commit()
     connection.close()
 
-    return redirect(
-        url_for("admin_dashboard")
-    )
+    return redirect(url_for("admin_dashboard"))
+
 
 
 
